@@ -4,7 +4,7 @@ use axum::{
     Router,
     http::StatusCode,
 };
-use crate::api::models::{StatsResponse, AddBatchRequest, StatsQuery};
+use crate::models::{StatsResponse, AddBatchRequest, StatsQuery};
 
 
 #[axum::debug_handler]
