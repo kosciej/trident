@@ -1,7 +1,7 @@
 pub mod naive;
 mod proper;
 
-pub trait Calculator: Clone + Send + Sync {
+pub trait Calculator {
     fn append(&mut self, values: &[f64]);
     fn calculate_stats(&self, k: u8) -> crate::models::StatsResponse;
 }

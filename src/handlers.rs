@@ -1,10 +1,6 @@
 use crate::{
-    calculator::{
-        naive::{self, NaiveCalculator},
-        Calculator,
-    },
     models::{AddBatchRequest, StatsQuery, StatsResponse},
-    AppState,
+    state::AppState,
 };
 use axum::{
     extract::{Json, Query},
@@ -23,17 +19,10 @@ async fn stats_handler(
         return Err(StatusCode::BAD_REQUEST);
     }
 
-    if let Some(calculator) = state
-        .calculators
-        .lock()
-        .expect("Poisoned lock")
-        .get_mut(&query.symbol)
-    {
-        let stats = calculator.calculate_stats(k as u8);
-        Ok(Json(stats))
-    } else {
-        Err(StatusCode::NOT_FOUND)
-    }
+    state
+        .stats(&query.symbol, k)
+        .map(Json)
+        .ok_or(StatusCode::NOT_FOUND)
 }
 
 // POST /add_batch/
@@ -50,16 +39,7 @@ async fn add_batch_handler(
         return StatusCode::BAD_REQUEST;
     }
 
-    {
-        let mut map = state.calculators.lock().expect("Poisoned mutex");
-        map.entry(payload.symbol)
-            .and_modify(|e| e.append(&payload.values))
-            .or_insert_with(|| {
-                let mut calc = crate::calculator::naive::NaiveCalculator::new(100_000_000);
-                calc.append(&payload.values);
-                calc
-            });
-    }
+    state.append(payload.symbol, &payload.values);
 
     StatusCode::OK
 }
