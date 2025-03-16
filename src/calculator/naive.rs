@@ -5,6 +5,7 @@ use crate::models::StatsResponse;
 
 use super::Calculator;
 
+#[derive(Clone)]
 pub struct NaiveCalculator {
     buffer: VecDeque<f64>,
     capacity: usize,
