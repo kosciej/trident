@@ -6,19 +6,21 @@ use crate::models::StatsResponse;
 use super::Calculator;
 
 pub struct OptimizedCalculator {
-    calculators: Vec<InnerCalc>
+    calculators: Vec<InnerCalc>,
 }
 
 impl OptimizedCalculator {
     pub fn new(k_capacity: u8) -> Self {
-        let calculators = (1..k_capacity).map(|k| InnerCalc::new(10_usize.pow(k.into()))).collect();
+        let calculators = (1..k_capacity)
+            .map(|k| InnerCalc::new(10_usize.pow(k.into())))
+            .collect();
         OptimizedCalculator { calculators }
     }
 }
 
 impl Calculator for OptimizedCalculator {
     fn append(&mut self, values: &[f64]) {
-        self.calculators.iter_mut().for_each(|c|c.append(values));
+        self.calculators.iter_mut().for_each(|c| c.append(values));
     }
 
     fn calculate_stats(&self, k: u8) -> crate::models::StatsResponse {
@@ -34,7 +36,7 @@ pub struct InnerCalc {
     min_deque: VecDeque<f64>,
     sum: f64,
     sum_sq: f64,
-    capacity: usize
+    capacity: usize,
 }
 
 impl InnerCalc {
@@ -73,7 +75,6 @@ impl InnerCalc {
             self.buffer.push_front(*v);
             self.sum += *v;
             self.sum_sq += v.powi(2);
-            
 
             // Maintain min deque (ascending order)
             while let Some(&back) = self.min_deque.back() {
@@ -94,8 +95,6 @@ impl InnerCalc {
                 }
             }
             self.max_deque.push_back(*v);
-
-            
         }
     }
 
