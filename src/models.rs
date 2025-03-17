@@ -11,12 +11,3 @@ pub struct StatsQuery {
     pub symbol: String,
     pub k: Option<u32>,
 }
-
-#[derive(Serialize, Default)]
-pub struct StatsResponse {
-    pub min: f64,
-    pub max: f64,
-    pub last: f64,
-    pub avg: f64,
-    pub var: f64,
-}

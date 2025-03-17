@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 use std::f64;
 
-use crate::models::StatsResponse;
+use crate::StatsResponse;
 
 use super::Calculator;
 
@@ -23,7 +23,7 @@ impl Calculator for OptimizedCalculator {
         self.calculators.iter_mut().for_each(|c| c.append(values));
     }
 
-    fn calculate_stats(&self, k: u8) -> crate::models::StatsResponse {
+    fn calculate_stats(&self, k: u8) -> crate::StatsResponse {
         let i: &InnerCalc = &self.calculators[(k - 1) as usize];
         i.calculate_stats()
     }
@@ -98,7 +98,7 @@ impl InnerCalc {
         }
     }
 
-    fn calculate_stats(&self) -> crate::models::StatsResponse {
+    fn calculate_stats(&self) -> crate::StatsResponse {
         if self.buffer.is_empty() {
             return StatsResponse::default();
         }

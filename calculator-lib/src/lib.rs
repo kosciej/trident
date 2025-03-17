@@ -3,7 +3,16 @@ pub mod optimized;
 
 pub trait Calculator {
     fn append(&mut self, values: &[f64]);
-    fn calculate_stats(&self, k: u8) -> crate::models::StatsResponse;
+    fn calculate_stats(&self, k: u8) -> crate::StatsResponse;
+}
+
+#[derive(Debug, serde::Serialize, Default)]
+pub struct StatsResponse {
+    pub last: f64,
+    pub min: f64,
+    pub max: f64,
+    pub avg: f64,
+    pub var: f64,
 }
 
 #[allow(dead_code)]

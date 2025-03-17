@@ -1,10 +1,7 @@
 use dashmap::DashMap;
 use std::sync::Arc;
 
-use crate::{
-    calculator::{optimized, Calculator},
-    models::StatsResponse,
-};
+use calculator_lib::{optimized, Calculator, StatsResponse};
 
 #[derive(Clone)]
 pub struct AppState {

@@ -1,6 +1,5 @@
 use std::net::SocketAddr;
 use tokio::net::TcpListener;
-mod calculator;
 mod handlers;
 mod models;
 mod state;

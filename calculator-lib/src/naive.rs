@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 use std::f64;
 
-use crate::models::StatsResponse;
+use crate::StatsResponse;
 
 use super::Calculator;
 
@@ -30,7 +30,7 @@ impl Calculator for NaiveCalculator {
         }
     }
 
-    fn calculate_stats(&self, k: u8) -> crate::models::StatsResponse {
+    fn calculate_stats(&self, k: u8) -> crate::StatsResponse {
         if self.buffer.is_empty() {
             return StatsResponse::default();
         }

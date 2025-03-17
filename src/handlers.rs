@@ -1,7 +1,10 @@
 use crate::{
-    models::{AddBatchRequest, StatsQuery, StatsResponse},
+    models::{AddBatchRequest, StatsQuery},
     state::AppState,
 };
+
+use calculator_lib::StatsResponse;
+
 use axum::{
     extract::{Json, Query},
     http::StatusCode,
