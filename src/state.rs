@@ -1,7 +1,5 @@
-use std::{
-    collections::HashMap,
-    sync::{Arc, Mutex},
-};
+use dashmap::DashMap;
+use std::sync::Arc;
 
 use crate::{
     calculator::{optimized, Calculator},
@@ -10,22 +8,20 @@ use crate::{
 
 #[derive(Clone)]
 pub struct AppState {
-    calculators: Arc<Mutex<HashMap<String, Box<dyn Calculator + Send>>>>,
+    calculators: Arc<DashMap<String, Box<dyn Calculator + Send + Sync>>>,
 }
 
 pub fn new() -> AppState {
-    let calculators: HashMap<String, Box<dyn Calculator + Send>> = HashMap::new();
-
     AppState {
-        calculators: Arc::new(Mutex::new(calculators)),
+        calculators: Arc::new(DashMap::new()),
     }
 }
 
 impl AppState {
     pub fn append(&self, symbol: String, values: &[f64]) {
-        let mut map = self.calculators.lock().expect("Poisoned mutex");
-        map.entry(symbol)
-            .and_modify(|e| e.append(values))
+        self.calculators
+            .entry(symbol)
+            .and_modify(|calc| calc.append(values))
             .or_insert_with(|| {
                 let mut calc = optimized();
                 calc.append(values);
@@ -35,9 +31,7 @@ impl AppState {
 
     pub fn stats(&self, symbol: &str, k: u32) -> Option<StatsResponse> {
         self.calculators
-            .lock()
-            .expect("Poisoned mutex")
             .get_mut(symbol)
-            .map(|c| c.calculate_stats(k as u8))
+            .map(|mut entry| entry.value_mut().calculate_stats(k as u8))
     }
 }
