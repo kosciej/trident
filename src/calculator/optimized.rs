@@ -11,7 +11,7 @@ pub struct OptimizedCalculator {
 
 impl OptimizedCalculator {
     pub fn new(k_capacity: u8) -> Self {
-        let calculators = (1..k_capacity)
+        let calculators = (1..=k_capacity)
             .map(|k| InnerCalc::new(10_usize.pow(k.into())))
             .collect();
         OptimizedCalculator { calculators }
