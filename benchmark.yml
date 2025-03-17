@@ -1,0 +1,34 @@
+---
+
+concurrency: 100
+base: 'http://127.0.0.1:3000'
+iterations: 1000
+rampup: 2
+
+plan:
+  - name: Fetch some instruments
+    request:
+      url: /stats?symbol={{ item }}&k=3
+    with_items:
+    - EURUSD
+    - EURPLN
+    - USDPLN
+
+  - name: POST some crafted JSONs stored in CSV, index 
+    request:
+      url: /add_batch
+      method: POST
+      body: '{{ item.inpt }}'
+      headers:
+        Content-Type: 'application/json'
+    with_items_from_csv:
+      file_name: ./bench_inputs.csv
+      quote_char: "\'"
+
+  - name: Fetch some instruments
+    request:
+      url: /stats?symbol={{ item }}&k=3
+    with_items:
+    - EURUSD
+    - EURPLN
+    - USDPLN

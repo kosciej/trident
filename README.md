@@ -29,6 +29,15 @@ To run the test suite:
 cargo test
 ```
 
+## Load Testing
+
+Run load testing with drill:
+
+```bash
+cargo install drill
+drill --benchmark benchmark.yml --stats
+```
+
 ## Sample Curl Commands
 
 ### Add Batch
