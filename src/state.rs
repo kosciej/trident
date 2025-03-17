@@ -4,7 +4,7 @@ use std::{
 };
 
 use crate::{
-    calculator::{naive, Calculator},
+    calculator::{optimized, Calculator},
     models::StatsResponse,
 };
 
@@ -27,7 +27,7 @@ impl AppState {
         map.entry(symbol)
             .and_modify(|e| e.append(values))
             .or_insert_with(|| {
-                let mut calc = naive();
+                let mut calc = optimized();
                 calc.append(values);
                 Box::new(calc)
             });
