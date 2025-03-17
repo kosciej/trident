@@ -21,6 +21,14 @@ This project (with name obviously playing with Neptune name) provides an API for
     ```
     This will start the server, which listens on `localhost:3000`.
 
+## Testing
+
+To run the test suite:
+
+```bash
+cargo test
+```
+
 ## Sample Curl Commands
 
 ### Add Batch

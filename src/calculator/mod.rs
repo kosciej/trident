@@ -1,5 +1,5 @@
 pub mod naive;
-mod optimized;
+pub mod optimized;
 
 pub trait Calculator {
     fn append(&mut self, values: &[f64]);
@@ -22,9 +22,7 @@ mod tests {
     use assert_float_eq::*;
     use rand::{Rng, SeedableRng, rngs::StdRng};
 
-
     #[test]
-    #[ignore = "long-running comparison test"]
     fn compare_implementations() {
         let mut rng = StdRng::seed_from_u64(42);
         let mut naive = naive();
