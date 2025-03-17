@@ -75,8 +75,25 @@ impl InnerCalc {
             self.sum_sq += v.powi(2);
             
 
-            self.min_deque.push_front(*v);
-            self.max_deque.push_front(*v);
+            // Maintain min deque (ascending order)
+            while let Some(&back) = self.min_deque.back() {
+                if back > *v {
+                    self.min_deque.pop_back();
+                } else {
+                    break;
+                }
+            }
+            self.min_deque.push_back(*v);
+
+            // Maintain max deque (descending order)
+            while let Some(&back) = self.max_deque.back() {
+                if back < *v {
+                    self.max_deque.pop_back();
+                } else {
+                    break;
+                }
+            }
+            self.max_deque.push_back(*v);
 
             
         }
@@ -114,8 +131,8 @@ mod tests {
         let mut calc = OptimizedCalculator::new(3);
         calc.append(&[1.0, 2.0, 3.0]);
         let stats = calc.calculate_stats(1);
-        // assert_eq!(stats.min, 1.0);
-        // assert_eq!(stats.max, 3.0);
+        assert_eq!(stats.min, 1.0);
+        assert_eq!(stats.max, 3.0);
         assert_eq!(stats.last, 3.0);
         assert_eq!(stats.avg, 2.0);
         assert_f64_near!(stats.var, 0.6666666666666666);
@@ -130,8 +147,8 @@ mod tests {
         }
         calc.append(&values);
         let stats = calc.calculate_stats(6);
-        // assert_eq!(stats.min, 0.0);
-        // assert_eq!(stats.max, 999999.0);
+        assert_eq!(stats.min, 0.0);
+        assert_eq!(stats.max, 999999.0);
         assert_f64_near!(stats.last, 999999.0);
         assert_f64_near!(stats.avg, 499999.5);
         assert_f64_near!(stats.var, 83333333332.87756);
