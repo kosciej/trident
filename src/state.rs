@@ -27,7 +27,7 @@ impl AppState {
         map.entry(symbol)
             .and_modify(|e| e.append(values))
             .or_insert_with(|| {
-                let mut calc = naive(100_000_000);
+                let mut calc = naive();
                 calc.append(values);
                 Box::new(calc)
             });
