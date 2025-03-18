@@ -5,8 +5,12 @@ edition = "2021"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-dashmap = "6.1.0"
 
 [dev-dependencies]
 assert_float_eq = "1.1.4"
 rand = "0.8.5"
+criterion = "0.5"
+
+[[bench]]
+name = "calculator_benchmark"
+harness = false
