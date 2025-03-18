@@ -73,7 +73,7 @@ impl InnerCalc {
 
 impl InnerCalc {
     /// Add values while maintaining statistical aggregates in O(1) amortized time
-    /// 
+    ///
     /// # Example
     /// ```
     /// use calculator_lib::optimized::InnerCalc;
@@ -127,7 +127,7 @@ impl InnerCalc {
     }
 
     /// Calculates stats in O(1) time
-    /// 
+    ///
     /// # Example
     /// ```
     /// use calculator_lib::optimized::InnerCalc;

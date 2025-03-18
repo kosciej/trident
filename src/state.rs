@@ -1,7 +1,7 @@
 use dashmap::DashMap;
 use std::sync::Arc;
 
-use calculator_lib::{optimized, Calculator, StatsResponse};
+use calculator_lib::{optimized, Calculator};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -26,9 +26,9 @@ impl AppState {
             });
     }
 
-    pub fn stats(&self, symbol: &str, k: u32) -> Option<StatsResponse> {
+    pub fn stats(&self, symbol: &str, k: u32) -> Option<crate::models::StatsResponse> {
         self.calculators
             .get_mut(symbol)
-            .map(|mut entry| entry.value_mut().calculate_stats(k as u8))
+            .map(|mut entry| entry.value_mut().calculate_stats(k as u8).into())
     }
 }

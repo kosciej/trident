@@ -1,9 +1,7 @@
 use crate::{
-    models::{AddBatchRequest, StatsQuery},
+    models::{AddBatchRequest, StatsQuery, StatsResponse},
     state::AppState,
 };
-
-use calculator_lib::StatsResponse;
 
 use axum::{
     extract::{Json, Query},
@@ -19,7 +17,8 @@ async fn stats_handler(
 ) -> Result<Json<StatsResponse>, StatusCode> {
     tracing::debug!(
         "Received stats request for symbol {}: k = {:?}",
-        query.symbol, query.k
+        query.symbol,
+        query.k
     );
     let k = query.k.unwrap_or(1);
     if !(1..=8).contains(&k) {
@@ -39,7 +38,8 @@ async fn add_batch_handler(
 ) -> StatusCode {
     tracing::debug!(
         "Received batch for symbol {}: {:?}",
-        payload.symbol, payload.values
+        payload.symbol,
+        payload.values
     );
 
     if payload.values.len() > 10000 {

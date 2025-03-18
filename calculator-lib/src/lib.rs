@@ -91,7 +91,7 @@ pub fn optimized() -> impl Calculator {
 mod tests {
     use super::*;
     use assert_float_eq::*;
-    use rand::{Rng, SeedableRng, rngs::StdRng};
+    use rand::{rngs::StdRng, Rng, SeedableRng};
 
     #[test]
     fn compare_implementations() {

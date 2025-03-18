@@ -1,5 +1,5 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use calculator_lib::{naive, optimized, Calculator};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use rand::Rng;
 
 fn generate_data(n: usize) -> Vec<f64> {
@@ -9,7 +9,7 @@ fn generate_data(n: usize) -> Vec<f64> {
 
 fn naive_benchmark(c: &mut Criterion) {
     let data = generate_data(1_000_000);
-    
+
     c.bench_function("naive appending", |b| {
         b.iter(|| {
             let mut calc = naive();
@@ -26,7 +26,6 @@ fn naive_benchmark(c: &mut Criterion) {
         })
     });
 
-    
     c.bench_function("optimized appending", |b| {
         b.iter(|| {
             let mut calc = optimized();
@@ -41,11 +40,11 @@ fn naive_benchmark(c: &mut Criterion) {
         b.iter(|| {
             black_box(calc.calculate_stats(8));
         })
-    });}
+    });
+}
 
 fn optimized_benchmark(c: &mut Criterion) {
     let data = generate_data(1_000_000);
-
 }
 
 criterion_group!(benches, naive_benchmark);
