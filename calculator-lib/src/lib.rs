@@ -1,26 +1,88 @@
+//! Statistical calculator library
+//!
+//! Provides two implementations for calculating streaming statistics:
+//! - Naive calculator: Simple reference implementation
+//! - Optimized calculator: Performance-optimized version
+//!
+//! # Examples
+//! ```
+//! use calculator_lib::{naive, Calculator};
+//!
+//! let mut calc = naive();
+//! calc.append(&[1.0, 2.0, 3.0]);
+//! let stats = calc.calculate_stats(1);
+//! ```
+
 pub mod naive;
 pub mod optimized;
 
+/// Trait defining calculator operations
 pub trait Calculator {
+    /// Append values to the calculator's dataset
+    ///
+    /// # Arguments
+    /// * `values` - Slice of f64 values to add
     fn append(&mut self, values: &[f64]);
+    /// Calculate statistical measures for the dataset
+    ///
+    /// # Arguments
+    /// * `k` - Number of last values to use in stats calculation 1e{k}
+    ///
+    /// # Returns
+    /// [`StatsResponse`] containing calculated statistics
     fn calculate_stats(&self, k: u8) -> crate::StatsResponse;
 }
 
+/// Statistical measures container
+///
+/// Contains calculated statistics for a dataset with precision control.
 #[derive(Debug, serde::Serialize, Default)]
 pub struct StatsResponse {
+    /// Last value added to the dataset
     pub last: f64,
+    /// Minimum value in the dataset
     pub min: f64,
+    /// Maximum value in the dataset
     pub max: f64,
+    /// Arithmetic mean of the dataset
     pub avg: f64,
+    /// Variance of the dataset
     pub var: f64,
 }
 
-#[allow(dead_code)]
+/// Create a naive calculator implementation
+///
+/// Uses a simple buffer-based approach with:
+/// - O(1) append operations
+/// - O(n) statistical calculations
+/// - Fixed buffer size of 100 million elements
+///
+/// # Examples
+/// ```
+/// use calculator_lib::naive;
+///
+/// let mut calc = naive();
+/// calc.append(&[1.0, 2.0, 3.0]);
+/// let stats = calc.calculate_stats(2);
+/// ```
 pub fn naive() -> impl Calculator {
     naive::NaiveCalculator::new(10_usize.pow(8))
 }
 
-#[allow(dead_code)]
+/// Create an optimized calculator implementation
+///
+/// Uses circular buffers with:
+/// - amortized O(1) append operations
+/// - O(1) statistical calculations
+///
+/// # Examples
+/// ```
+/// use calculator_lib::optimized;
+///
+/// let mut calc = optimized();
+/// calc.append(&[1.0, 2.0, 3.0]);
+/// let stats = calc.calculate_stats(2);
+/// ```
 pub fn optimized() -> impl Calculator {
     optimized::OptimizedCalculator::new(8)
 }

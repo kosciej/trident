@@ -1,3 +1,9 @@
+//! Naive implementation of streaming statistics calculator
+//!
+//! This implementation uses a simple VecDeque buffer with:
+//! - First-in-first-out eviction when capacity is reached
+//! - O(n) time complexity for statistical calculations
+
 use std::collections::VecDeque;
 use std::f64;
 
@@ -5,13 +11,29 @@ use crate::StatsResponse;
 
 use super::Calculator;
 
+/// Naive streaming statistics calculator implementation
+///
+/// Uses a simple buffer-based approach with first-in-first-out eviction policy.
 #[derive(Clone)]
 pub struct NaiveCalculator {
+    /// Circular buffer storing recent values (newest at front)
     buffer: VecDeque<f64>,
+    /// Maximum number of values to retain
     capacity: usize,
 }
 
 impl NaiveCalculator {
+    /// Create a new NaiveCalculator with specified capacity
+    ///
+    /// # Arguments
+    /// * `capacity` - Maximum number of values to retain in memory
+    ///
+    /// # Examples
+    /// ```
+    /// use calculator_lib::naive::NaiveCalculator;
+    ///
+    /// let calculator = NaiveCalculator::new(1000);
+    /// ```
     pub fn new(capacity: usize) -> Self {
         NaiveCalculator {
             buffer: VecDeque::with_capacity(capacity),
@@ -21,6 +43,19 @@ impl NaiveCalculator {
 }
 
 impl Calculator for NaiveCalculator {
+    /// Add values to the calculator, maintaining capacity limits
+    ///
+    /// New values are added to the front of the buffer.
+    /// If capacity is exceeded, oldest values are removed from the back.
+    ///
+    /// # Example
+    /// ```
+    /// use calculator_lib::naive::NaiveCalculator;
+    ///
+    /// let mut calc = NaiveCalculator::new(3);
+    /// calc.append(&[1.0, 2.0, 3.0, 4.0]);
+    /// assert_eq!(calc.buffer.len(), 3);
+    /// ```
     fn append(&mut self, values: &[f64]) {
         for i in values {
             if self.buffer.len() == self.capacity {

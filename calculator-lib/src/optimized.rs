@@ -1,3 +1,11 @@
+//! Optimized implementation of streaming statistics calculator
+//!
+//! This implementation uses specialized data structures to maintain:
+//! - O(1) time complexity for statistical calculations
+//! - O(1) amortized time for value insertion/eviction
+// - - Incremental sum and sum of squares tracking
+//! - Monotonic deques for min/max tracking
+
 use std::collections::VecDeque;
 use std::f64;
 
@@ -5,6 +13,10 @@ use crate::StatsResponse;
 
 use super::Calculator;
 
+/// Optimized streaming statistics calculator with multiple window sizes
+///
+/// Maintains parallel calculators for different window sizes (10^k)
+/// to enable O(1) lookups of statistics for any supported k value.
 pub struct OptimizedCalculator {
     calculators: Vec<InnerCalc>,
 }
@@ -29,13 +41,20 @@ impl Calculator for OptimizedCalculator {
     }
 }
 
+/// Inner calculator maintaining statistics for a specific window size
 #[derive(Clone)]
 pub struct InnerCalc {
+    /// Circular buffer of values
     buffer: VecDeque<f64>,
+    /// Monotonic deque for emax tracking
     max_deque: VecDeque<f64>,
+    /// Monotonic deque for min tracking
     min_deque: VecDeque<f64>,
+    /// Running sum of values in buffer
     sum: f64,
+    /// Running sum of squared values in buffer
     sum_sq: f64,
+    /// Maximum number of values to retain
     capacity: usize,
 }
 
@@ -53,9 +72,18 @@ impl InnerCalc {
 }
 
 impl InnerCalc {
+    /// Add values while maintaining statistical aggregates in O(1) amortized time
+    /// 
+    /// # Example
+    /// ```
+    /// use calculator_lib::optimized::InnerCalc;
+    ///
+    /// let mut calc = InnerCalc::new(100);
+    /// calc.append(&[1.0, 2.0, 3.0]);
+    /// ```
     fn append(&mut self, values: &[f64]) {
         for v in values {
-            // drop old value
+            // Maintain buffer capacity by evicting oldest values
             if self.buffer.len() == self.capacity {
                 let minus = self.buffer.pop_back().unwrap();
                 self.sum -= minus;
@@ -98,6 +126,16 @@ impl InnerCalc {
         }
     }
 
+    /// Calculates stats in O(1) time
+    /// 
+    /// # Example
+    /// ```
+    /// use calculator_lib::optimized::InnerCalc;
+    ///
+    /// let mut calc = InnerCalc::new(100);
+    /// calc.append(&[1.0, 2.0, 3.0]);
+    /// calc.calculate_stats()
+    /// ```
     fn calculate_stats(&self) -> crate::StatsResponse {
         if self.buffer.is_empty() {
             return StatsResponse::default();

@@ -38,6 +38,15 @@ cargo install drill
 drill --benchmark benchmark.yml --stats
 ```
 
+## Library docs
+
+To view calculation library docs:
+
+```bash
+cd calculator-lib
+cargo doc --open 
+```
+
 ## Sample Curl Commands
 
 ### Add Batch
