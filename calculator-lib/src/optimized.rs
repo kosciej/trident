@@ -43,7 +43,7 @@ impl Calculator for OptimizedCalculator {
 
 /// Inner calculator maintaining statistics for a specific window size
 #[derive(Clone)]
-pub struct InnerCalc {
+struct InnerCalc {
     /// Circular buffer of values
     buffer: VecDeque<f64>,
     /// Monotonic deque for emax tracking
@@ -59,7 +59,7 @@ pub struct InnerCalc {
 }
 
 impl InnerCalc {
-    pub fn new(capacity: usize) -> Self {
+    fn new(capacity: usize) -> Self {
         InnerCalc {
             buffer: VecDeque::with_capacity(capacity),
             max_deque: VecDeque::with_capacity(capacity),
