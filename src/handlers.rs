@@ -17,6 +17,10 @@ async fn stats_handler(
     axum::extract::State(state): axum::extract::State<AppState>,
     query: Query<StatsQuery>,
 ) -> Result<Json<StatsResponse>, StatusCode> {
+    tracing::debug!(
+        "Received stats request for symbol {}: k = {:?}",
+        query.symbol, query.k
+    );
     let k = query.k.unwrap_or(1);
     if !(1..=8).contains(&k) {
         return Err(StatusCode::BAD_REQUEST);
@@ -33,7 +37,7 @@ async fn add_batch_handler(
     axum::extract::State(state): axum::extract::State<AppState>,
     Json(payload): Json<AddBatchRequest>,
 ) -> StatusCode {
-    println!(
+    tracing::debug!(
         "Received batch for symbol {}: {:?}",
         payload.symbol, payload.values
     );

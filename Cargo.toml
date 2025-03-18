@@ -10,6 +10,8 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 dashmap = "6.1.0"
 calculator_lib ={ path = "./calculator-lib"}
+tracing = "0.1"
+tracing-subscriber = "0.3"
 
 [dev-dependencies]
 assert_float_eq = "1.1.4"
