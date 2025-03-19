@@ -55,3 +55,62 @@ pub fn create_api_routes(state: AppState) -> Router {
         .route("/add_batch", post(add_batch_handler))
         .with_state(state)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use axum::{
+        body::Body,
+        http::{Request, StatusCode},
+    };
+    use tower::ServiceExt;
+
+    #[tokio::test]
+    async fn test_stats_handler() {
+        let state = crate::state::new();
+        state.append("TEST".into(), &[10.0, 20.0, 30.0]);
+
+        let app = create_api_routes(state);
+
+        // Test valid request
+        let response = app
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .uri("/stats?symbol=TEST&k=1")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
+
+        // Test invalid k value
+        let response = app
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .uri("/stats?symbol=TEST&k=9")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::BAD_REQUEST);
+
+        // Test non-existent symbol
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/stats?symbol=INVALID")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+}
