@@ -28,8 +28,8 @@ impl AppState {
 
     pub fn stats(&self, symbol: &str, k: u32) -> Option<crate::models::StatsResponse> {
         self.calculators
-            .get_mut(symbol)
-            .map(|mut entry| entry.value_mut().calculate_stats(k as u8).into())
+            .get(symbol)
+            .map(|entry| entry.value().calculate_stats(k as u8).into())
     }
 }
 
