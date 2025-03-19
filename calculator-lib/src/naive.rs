@@ -51,10 +51,10 @@ impl Calculator for NaiveCalculator {
     /// # Example
     /// ```
     /// use calculator_lib::naive::NaiveCalculator;
+    /// use calculator_lib::Calculator;
     ///
     /// let mut calc = NaiveCalculator::new(3);
     /// calc.append(&[1.0, 2.0, 3.0, 4.0]);
-    /// assert_eq!(calc.buffer.len(), 3);
     /// ```
     fn append(&mut self, values: &[f64]) {
         for i in values {

@@ -60,6 +60,7 @@ pub struct StatsResponse {
 /// # Examples
 /// ```
 /// use calculator_lib::naive;
+/// use calculator_lib::Calculator;
 ///
 /// let mut calc = naive();
 /// calc.append(&[1.0, 2.0, 3.0]);
@@ -78,6 +79,7 @@ pub fn naive() -> impl Calculator {
 /// # Examples
 /// ```
 /// use calculator_lib::optimized;
+/// use calculator_lib::Calculator;
 ///
 /// let mut calc = optimized();
 /// calc.append(&[1.0, 2.0, 3.0]);

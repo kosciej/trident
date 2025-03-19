@@ -73,14 +73,6 @@ impl InnerCalc {
 
 impl InnerCalc {
     /// Add values while maintaining statistical aggregates in O(1) amortized time
-    ///
-    /// # Example
-    /// ```
-    /// use calculator_lib::optimized::InnerCalc;
-    ///
-    /// let mut calc = InnerCalc::new(100);
-    /// calc.append(&[1.0, 2.0, 3.0]);
-    /// ```
     fn append(&mut self, values: &[f64]) {
         for v in values {
             // Maintain buffer capacity by evicting oldest values
@@ -127,15 +119,6 @@ impl InnerCalc {
     }
 
     /// Calculates stats in O(1) time
-    ///
-    /// # Example
-    /// ```
-    /// use calculator_lib::optimized::InnerCalc;
-    ///
-    /// let mut calc = InnerCalc::new(100);
-    /// calc.append(&[1.0, 2.0, 3.0]);
-    /// calc.calculate_stats()
-    /// ```
     fn calculate_stats(&self) -> crate::StatsResponse {
         if self.buffer.is_empty() {
             return StatsResponse::default();
